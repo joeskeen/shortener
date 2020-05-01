@@ -1,18 +1,20 @@
-<div [formGroup]="linkForm">
-  <hc-form-field>
-    <hc-label>Link title:</hc-label>
-    <input hcInput formControlName="title" (keyup.enter)="submit()" />
-  </hc-form-field>
-  <hc-form-field>
-    <hc-label>Link URL:</hc-label>
-    <input hcInput formControlName="url" (keyup.enter)="submit()" />
-    <hc-error>URL is required</hc-error>
-  </hc-form-field>
-  <button hc-button [disabled]="linkForm.invalid" (click)="submit()">Submit</button>
+<div class="container"> 
+  <div [formGroup]="linkForm">
+    <hc-form-field>
+      <hc-label>Link title:</hc-label>
+      <input hcInput formControlName="title" (keyup.enter)="submit()" />
+    </hc-form-field>
+    <hc-form-field>
+      <hc-label>Link URL:</hc-label>
+      <input hcInput formControlName="url" (keyup.enter)="submit()" />
+      <hc-error>URL is required</hc-error>
+    </hc-form-field>
+    <button hc-button [disabled]="linkForm.invalid" (click)="submit()">Submit</button>
+  </div>
+  
+  <hc-tile *ngIf="shortUrl">
+    {{title}}
+    <ngx-qrcode #qrCode qrc-element-type="url" [qrc-value]="shortUrl"></ngx-qrcode>
+    <a [href]="shortUrl">{{shortUrl}}</a>
+  </hc-tile>
 </div>
-
-<hc-tile *ngIf="shortUrl">
-  {{title}}
-  <ngx-qrcode #qrCode qrc-element-type="url" [qrc-value]="url"></ngx-qrcode>
-  {{shortUrl}}
-</hc-tile>
