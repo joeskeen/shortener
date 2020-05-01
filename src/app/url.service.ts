@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { StorageMap } from '@ngx-pwa/local-storage';
 
 const hashLength = 5;
-const hashChars =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-// const corsProxy = '';
+const hashChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 const corsProxy = 'https://cors-anywhere.herokuapp.com/';
 const endpoint = 'https://db.neelr.dev/api/19a2702cf961c0e2cecdde4ba9d187fb';
 
