@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UrlService } from './url.service';
 import { fromEvent } from 'rxjs';
+import { HcToasterService } from '@healthcatalyst/cashmere';
 
 @Component({
   selector: 'app-root',
@@ -18,18 +19,28 @@ export class AppComponent implements OnInit {
   url: string;
   shortUrl: string;
 
-  constructor(private urlService: UrlService) {}
+  constructor(private urlService: UrlService, private toasterService: HcToasterService) {}
 
   ngOnInit() {
     this.checkHash(window.location.hash);
-    fromEvent(window, 'hashchange').subscribe(() => this.checkHash(window.location.hash));
+    fromEvent(window, 'hashchange').subscribe(() =>
+      this.checkHash(window.location.hash)
+    );
   }
 
   async checkHash(hash: string) {
+    if (!hash || hash.length === 1) {
+      return;
+    }
+    hash = hash.replace(/^#/, '');
+
+    this.toasterService.addToast({ type: 'info', header: 'Redirecting', body: `Resolving URL for hash '${hash}'...`});
     const longUrl = await this.urlService.getLongUrl(hash);
     if (longUrl) {
-      console.log('detected hash', hash, longUrl);
       window.location.href = longUrl;
+      this.toasterService.addToast({ type: 'info', header: 'Redirecting', body: `Redirecting to '${longUrl}'...`});
+    } else {
+      this.toasterService.addToast({ type: 'alert', header: 'Oops!', body: `We couldn't find a URL matching hash '${hash}'.` });
     }
   }
 
@@ -40,6 +51,8 @@ export class AppComponent implements OnInit {
 
     this.title = this.linkForm.value.title;
     this.url = this.linkForm.value.url;
+    this.shortUrl = null; // to force progress indicator
+
     this.shortUrl = await this.urlService.getShortUrl(this.url);
   }
 }

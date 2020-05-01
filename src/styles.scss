@@ -8,3 +8,10 @@ $hc-icons-font-path: 'node_modules/@healthcatalyst/cashmere/hcicons';
 @import '~@healthcatalyst/cashmere/hcicons/hcicons';
 
 @import '~@healthcatalyst/cashmere/scss/cashmere';
+
+html, body {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

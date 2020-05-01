@@ -1,20 +1,35 @@
-<div class="container"> 
-  <div [formGroup]="linkForm">
-    <hc-form-field>
-      <hc-label>Link title:</hc-label>
-      <input hcInput formControlName="title" (keyup.enter)="submit()" />
-    </hc-form-field>
-    <hc-form-field>
-      <hc-label>Link URL:</hc-label>
-      <input hcInput formControlName="url" (keyup.enter)="submit()" />
-      <hc-error>URL is required</hc-error>
-    </hc-form-field>
-    <button hc-button [disabled]="linkForm.invalid" (click)="submit()">Submit</button>
+<div>
+  <h3>Url Shortener</h3>
+  <div class="container">
+    <div [formGroup]="linkForm">
+      <hc-form-field>
+        <hc-label>Link title:</hc-label>
+        <input hcInput formControlName="title" (keyup.enter)="submit()" />
+      </hc-form-field>
+      <hc-form-field>
+        <hc-label>Link URL:</hc-label>
+        <input hcInput formControlName="url" (keyup.enter)="submit()" />
+        <hc-error>URL is required</hc-error>
+      </hc-form-field>
+      <button hc-button [disabled]="linkForm.invalid" (click)="submit()">
+        Shorten
+      </button>
+    </div>
+
+    <div *ngIf="shortUrl !== undefined">
+      <hc-tile *ngIf="shortUrl">
+        <hc-progress-dots *ngIf="shortUrl === null" [isCentered]="true"></hc-progress-dots>
+        <div class="centered">
+          <span>{{ title }}</span>
+          <ngx-qrcode
+            *ngIf="shortUrl"
+            #qrCode
+            qrc-element-type="url"
+            [qrc-value]="shortUrl"
+          ></ngx-qrcode>
+          <a [href]="shortUrl">{{ shortUrl }}</a>
+        </div>
+      </hc-tile>
+    </div>
   </div>
-  
-  <hc-tile *ngIf="shortUrl">
-    {{title}}
-    <ngx-qrcode #qrCode qrc-element-type="url" [qrc-value]="shortUrl"></ngx-qrcode>
-    <a [href]="shortUrl">{{shortUrl}}</a>
-  </hc-tile>
 </div>

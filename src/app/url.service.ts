@@ -18,13 +18,11 @@ export class UrlService {
   }
 
   async getShortUrl(longUrl: string): Promise<string> {
-    console.log('get short URL for ', longUrl);
     const fullUrl = /^https?:\/\//.test(longUrl)
       ? longUrl
       : `https://${longUrl}`;
 
     if (await this.storage.has(fullUrl).toPromise()) {
-      console.log('returning url from cache');
       return (await this.storage.get(fullUrl).toPromise()) as string;
     }
 
@@ -32,16 +30,13 @@ export class UrlService {
     let hash: string;
     do {
       hash = this.generateHash();
-      console.log('hash', hash);
       urlCandidate = `${this.baseHref}#${hash}`;
       if (fullUrl.length < urlCandidate.length) {
-        console.log('short URL would be longer than long url', urlCandidate);
         await this.storage.set(fullUrl, fullUrl).toPromise();
         return Promise.resolve(fullUrl);
       }
       const existing = await this.getLongUrl(hash);
       if (existing && existing !== fullUrl) {
-        console.log('existing entry for hash', existing);
         hash = null;
       }
     } while (!hash);
